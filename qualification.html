@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2379 Burlington Army Cadets | Official</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="qualification.css">
+</head>
+<body>
+<nav class="navbar">
+    <div class="nav-container">
+        <a href="index.html" class="logo">2379 <span class="accent">CADETS</span></a>
+        
+        <div class="mobile-toggle" id="hammy">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+
+        <ul class="nav-links" id="nav-menu">
+            <li><a href="index.html">Home</a></li>
+                <li><a href="resources.html">Resources</a></li>
+                <li><a href="donate.html">Donate</a></li>
+                <li><a href="index.html#join-us" class="btn-nav-tactical">Join Unit</a></li>
+        </ul>
+    </div>
+</nav>
+<header class="hero-section">
+    <img src="cadet2.png" alt="Burlington Cadets" class="hero-bg">
+    <div class="hero-overlay">
+        <div class="hero-content">
+            <span class="eyebrow">Burlington, Ontario</span>
+            <h1>Excellence In <br><span class="highlight">Leadership</span></h1>
+            <p>Developing Canada's youth through adventure, discipline, and community service.</p>
+            <div class="hero-actions">
+                <a href="#join" class="btn-primary">Register Now</a>
+                <a href="#training" class="btn-outline">View Program</a>
+            </div>
+        </div>
+    </div>
+</header>
+
+    <main class="container">
+       <section id="training" class="section">
+    <div class="section-header">
+        <span class="eyebrow">Program Roadmap</span>
+        <h2 class="title">Star Level Training</h2>
+        <p class="subtitle">The core progression framework for the Royal Canadian Army Cadets.</p>
+    </div>
+
+    <div class="badge-grid">
+        <div class="badge-card">
+            <div class="badge-glow"></div> <div class="img-container">
+                <img src="green.png" alt="Green Star">
+            </div>
+            <div class="card-content">
+                <h3>Green Star</h3>
+                <span class="level-tag">Level 1</span>
+                <p>All new recruits begin at the Green Star level. The Green Star level gives cadets the  introductory knowledge and practical experience required to participate in corps activities as a member of a team.</p>
+            </div>
+        </div>
+        
+        <div class="badge-card">
+            <div class="badge-glow"></div>
+            <div class="img-container">
+                <img src="red.png" alt="Red Star">
+            </div>
+            <div class="card-content">
+                <h3>Red Star</h3>
+                <span class="level-tag">Level 2</span>
+                <p>Green star cadets progress on the Red Start level. The Red Start level gives cadets the basic theoretical knowledge and practical experience required to participate in cadet corps activities as a team member. </p>
+            </div>
+        </div>
+
+        <div class="badge-card">
+            <div class="badge-glow"></div>
+            <div class="img-container">
+                <img src="silver.png" alt="Silver Star">
+            </div>
+            <div class="card-content">
+                <h3>Silver Star</h3>
+                <span class="level-tag">Level 3</span>
+                <p>Red Star cadets progress towards the Silver Star level. The silver star level gives cadets the theoretical knowledge and practical experience required to participate in corps activities and appointments as a team leader. </p>
+            </div>
+        </div>
+
+        <div class="badge-card">
+            <div class="badge-glow"></div>
+            <div class="img-container">
+                <img src="gold.png" alt="Gold Star">
+            </div>
+            <div class="card-content">
+                <h3>Gold Star</h3>
+                <span class="level-tag">Level 4</span>
+                <p>Silver Star cadets progress towards Gold Start level. The Gold Star level gives cadets the theoretical knowledge and practical experience required to participate in corps activities and appointments as a team leader.</p>
+            </div>
+        </div>
+
+        <div class="badge-card">
+            <div class="badge-glow"></div>
+            <div class="img-container">
+                <img src="master.png" alt="Master Cadet">
+            </div>
+            <div class="card-content">
+                <h3>Master Cadet</h3>
+                <span class="level-tag">Advanced</span>
+                <p>Gold Star cadets progress towards the Master Cadet level.  The Master Cadet level gives cadets the theoretical knowledge and practical experience required to participate in corps activities and appointments as an activity leader. </p>
+            </div>
+        </div>
+    </div>
+</section>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2026 2379 Burlington Army Cadets. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+    function centerLastRow() {
+        const grid = document.querySelector('.badge-grid');
+        const cards = document.querySelectorAll('.badge-card');
+        
+        if (!grid || cards.length === 0) return;
+
+        // Reset previous positions
+        cards.forEach(card => card.style.gridColumn = "");
+
+        const gridWidth = grid.offsetWidth;
+        const cardWidth = cards[0].offsetWidth;
+        const gap = 30; 
+
+        const colsPerRow = Math.floor((gridWidth + gap) / (cardWidth + gap));
+        const totalCards = cards.length;
+        const leftover = totalCards % colsPerRow;
+
+        // Only center if there are leftovers (like the 2 bottom cards)
+        if (leftover > 0 && colsPerRow > leftover) {
+            const firstLeftoverIndex = totalCards - leftover;
+            const startCol = Math.floor((colsPerRow - leftover) / 2) + 1;
+            cards[firstLeftoverIndex].style.gridColumnStart = startCol;
+        }
+        console.log("Grid Updated: Centered last row.");
+    }
+
+    // Mobile Menu Toggle Logic
+    const menuBtn = document.getElementById('hammy');
+    const menuLinks = document.getElementById('nav-menu');
+
+    if (menuBtn && menuLinks) {
+        menuBtn.addEventListener('click', () => {
+            menuLinks.classList.toggle('active');
+            menuBtn.classList.toggle('active');
+            console.log("Menu Toggled");
+        });
+    }
+
+    // Run on load and resize
+    window.addEventListener('load', centerLastRow);
+    window.addEventListener('resize', centerLastRow);
+</script>
+
+</body>
+</html>

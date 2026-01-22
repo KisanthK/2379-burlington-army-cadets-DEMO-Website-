@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dress & Badges | 2379 Army Cadets</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="badge.css">
+</head>
+<body>
+<nav class="navbar">
+    <div class="nav-container">
+        <a href="index.html" class="logo">2379 <span class="accent">CADETS</span></a>
+        
+        <div class="mobile-toggle" id="hammy">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+
+        <ul class="nav-links" id="nav-menu">
+             <li><a href="index.html">Home</a></li>
+                <li><a href="resources.html">Resources</a></li>
+                <li><a href="donate.html">Donate</a></li>
+                <li><a href="index.html#join-us" class="btn-nav-tactical">Join Unit</a></li>
+        </ul>
+    </div>
+</nav>
+
+    <header class="hero">
+        <div class="hero-content">
+            <span class="eyebrow">Program Details</span>
+            <h1>Cadet <span class="highlight">Information</span></h1>
+            <p>Essential guidance for team members and activity leaders.</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <section id="info" class="section">
+    <div class="info-grid">
+        
+        <a href="https://www.canada.ca/en/department-national-defence/services/cadets-junior-canadian-rangers/cjcr-policy/cjcr-dress-instructions/chapter-6/annex-h.html" class="info-card" target="_blank">
+            <div class="card-accent"></div>
+            <div class="order-tag">C1</div>
+            <div class="card-content">
+                <h3>Service Dress</h3>
+                <p>The standard uniform for weekly training nights and public events. It consists of the tunic, necktie, and beret, representing unit pride.</p>
+                <span class="read-more">View Official Manual →</span>
+            </div>
+        </a>
+
+        <a href="https://www.canada.ca/en/department-national-defence/services/cadets-junior-canadian-rangers/cjcr-policy/cjcr-dress-instructions/chapter-6/annex-h.html" class="info-card" target="_blank">
+            <div class="card-accent"></div>
+            <div class="order-tag">C2</div>
+            <div class="card-content">
+                <h3>Training Dress</h3>
+                <p>Also known as Field Training Uniform (FTUs). Designed for high-activity environments, including field exercises and adventure training.</p>
+                <span class="read-more">View Official Manual →</span>
+            </div>
+        </a>
+
+        <a href="https://www.canada.ca/en/department-national-defence/services/cadets-junior-canadian-rangers/cjcr-policy/cjcr-dress-instructions/chapter-6/annex-h.html" class="info-card" target="_blank">
+            <div class="card-accent"></div>
+            <div class="order-tag">C3</div>
+            <div class="card-content">
+                <h3>Mess Dress</h3>
+                <p>A formal variant of the service uniform worn for dinners and functions. It focuses on tradition and camaraderie within the unit.</p>
+                <span class="read-more">View Official Manual →</span>
+            </div>
+        </a>
+
+        <a href="https://www.canada.ca/en/department-national-defence/services/cadets-junior-canadian-rangers/cjcr-policy/cjcr-dress-instructions/chapter-6/annex-h.html" class="info-card" target="_blank">
+            <div class="card-accent"></div>
+            <div class="order-tag">C4</div>
+            <div class="card-content">
+                <h3>Ceremonial Dress</h3>
+                <p>The highest order of dress, worn for Parades and Annual Reviews. Features medals and full accoutrements to showcase achievements.</p>
+                <span class="read-more">View Official Manual →</span>
+            </div>
+        </a>
+
+    </div>
+</section>
+    </main>
+
+    <script>
+        const hammy = document.getElementById('hammy');
+        const menu = document.getElementById('nav-menu');
+        hammy.addEventListener('click', () => {
+            hammy.classList.toggle('active');
+            menu.classList.toggle('active');
+        });
+    </script>
+</body>
+</html>
