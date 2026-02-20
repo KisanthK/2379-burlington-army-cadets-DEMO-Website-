@@ -16,6 +16,74 @@
     --off-white: #f8fafc;
     --bg-light: #f1f5f9;
 }
+/* Floating Back Button Styling */
+.back-link {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 9999; 
+    /* Using your brand navy with transparency */
+    background: rgba(0, 45, 98, 0.9); 
+    backdrop-filter: blur(8px);
+    /* Using your cadet green for text/borders */
+    color: var(--cadet-green); 
+    padding: 10px 22px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border: 1px solid var(--cadet-green);
+    transition: all 0.3s ease;
+}
+
+.back-link:hover {
+    background: var(--cadet-green);
+    color: var(--white);
+    transform: translateY(-2px);
+    box-shadow: 0 0 15px rgba(27, 127, 116, 0.4); /* Green glow effect */
+}
+
+/* --- Mobile Ergonomics (Thumb-Driven) --- */
+@media (max-width: 768px) {
+    .back-link {
+        top: auto;
+        bottom: 25px; /* Ergonomic bottom placement */
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80%;
+        text-align: center;
+        padding: 14px;
+        font-size: 0.9rem;
+        background: var(--brand-navy);
+        border: 2px solid var(--cadet-green);
+        box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.4);
+    }
+
+    .back-link:hover {
+        transform: translateX(-50%) translateY(-2px);
+    }
+}
+
+/* Bento Grid Responsive Adjustments (Fits Cadet Site Theme) */
+@media (max-width: 768px) {
+    .bento-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+        padding: 10px;
+    }
+
+    .bento-item {
+        min-height: 300px;
+        border: 1px solid rgba(27, 127, 116, 0.2); /* Subtle green border */
+    }
+
+    .bento-overlay .item-content {
+        padding: 20px;
+        background: linear-gradient(to top, rgba(0, 31, 61, 0.9), transparent);
+    }
+}
 /* --- 3. NAVIGATION ENGINE --- */
 nav {
     position: fixed; top: 0; width: 100%; height: 80px; z-index: 2000;
@@ -2564,3 +2632,4 @@ body {
     }
 }
 /*-----------------------------------------*/
+
