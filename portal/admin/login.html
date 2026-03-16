@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CMS Login — Burlington Cadets</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #1a1f2e;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #e2e8f0;
+    }
+
+    .card {
+      background: #242938;
+      border: 1px solid #2d3348;
+      border-radius: 12px;
+      padding: 2.5rem 2rem;
+      width: 100%;
+      max-width: 380px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+    }
+
+    .logo {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .logo h1 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #f8fafc;
+      letter-spacing: -0.02em;
+    }
+
+    .logo p {
+      font-size: 0.8rem;
+      color: #64748b;
+      margin-top: 0.3rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.2rem;
+    }
+
+    label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #94a3b8;
+      margin-bottom: 0.4rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    input {
+      width: 100%;
+      padding: 0.7rem 0.9rem;
+      background: #1a1f2e;
+      border: 1px solid #2d3348;
+      border-radius: 8px;
+      color: #f1f5f9;
+      font-size: 0.95rem;
+      transition: border-color 0.2s;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: #3b82f6;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 0.8rem;
+      background: #3b82f6;
+      color: #fff;
+      font-size: 0.95rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 0.5rem;
+      transition: background 0.2s;
+    }
+
+    .btn:hover { background: #2563eb; }
+
+    .error {
+      background: #450a0a;
+      border: 1px solid #7f1d1d;
+      color: #fca5a5;
+      padding: 0.7rem 0.9rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      margin-bottom: 1.2rem;
+      display: none;
+    }
+
+    .error.show { display: block; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="logo">
+      <h1>Burlington Cadets CMS</h1>
+      <p>2379 Army Cadet Corps — Admin Portal</p>
+    </div>
+
+    <div class="error" id="error-msg">Invalid username or password. Please try again.</div>
+
+    <form method="POST" action="/admin/login">
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" autocomplete="username" required autofocus>
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" autocomplete="current-password" required>
+      </div>
+      <button type="submit" class="btn">Sign In</button>
+    </form>
+  </div>
+
+  <script>
+    // Show error message if redirected back after failed login
+    if (document.referrer.includes('/admin/login') || window.location.search.includes('error')) {
+      document.getElementById('error-msg').classList.add('show');
+    }
+  </script>
+</body>
+</html>

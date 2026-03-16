@@ -1,0 +1,86 @@
+{
+  "home": {
+    "heroTitle": "2379 Burlington Army Cadet Corps",
+    "heroSubtitle": "Building Tomorrow's Leaders Today",
+    "heroButtonText": "Join Us",
+    "introHeading": "Welcome to 2379 Burlington",
+    "introText": "The 2379 Burlington Army Cadet Corps is a community-based youth organization that offers young Canadians aged 12–18 the opportunity to develop leadership, fitness, and citizenship skills.",
+    "meetingInfo": "We meet every Wednesday evening at 6:30 PM."
+  },
+  "about": {
+    "heading": "About Our Corps",
+    "mission": "Our mission is to develop in youth the attributes of good citizenship and leadership, physical fitness, and stimulate an interest in the Canadian Armed Forces.",
+    "historyHeading": "Our History",
+    "historyText": "2379 Burlington Army Cadet Corps has a proud tradition of serving the Burlington community and developing young leaders.",
+    "commanderName": "Commanding Officer",
+    "commanderTitle": "Captain"
+  },
+  "activities": {
+    "heading": "What We Do",
+    "intro": "Cadets participate in a wide range of exciting activities throughout the training year.",
+    "activity1Title": "Leadership Training",
+    "activity1Text": "Develop confidence and decision-making skills through progressive leadership courses.",
+    "activity2Title": "Physical Fitness",
+    "activity2Text": "Regular fitness training, obstacle courses, and sports competitions.",
+    "activity3Title": "Marksmanship",
+    "activity3Text": "Air rifle marksmanship training in a safe, supervised environment.",
+    "activity4Title": "Summer Expeditions",
+    "activity4Text": "Overnight exercises, camping, and national summer training centres."
+  },
+  "resources": {
+    "heading": "Cadet Resources",
+    "intro": "Find useful documents, forms, and links for cadets and parents.",
+    "linkTitle1": "Dress & Uniform Policy",
+    "linkUrl1": "#",
+    "linkTitle2": "Training Schedule",
+    "linkUrl2": "#",
+    "linkTitle3": "Annual Ceremonial Review",
+    "linkUrl3": "#",
+    "linkTitle4": "Parent & Guardian Guide",
+    "linkUrl4": "#"
+  },
+  "donate": {
+    "heading": "Support Our Cadets",
+    "intro": "Your generosity helps us fund equipment, training camps, and opportunities that would otherwise be out of reach for our cadets.",
+    "callToAction": "Every donation — big or small — makes a real difference.",
+    "donateButtonText": "Donate Now",
+    "donateButtonUrl": "#",
+    "leagueInfo": "Donations are accepted through the Royal Canadian Army Cadet League of Canada."
+  },
+  "badge": {
+    "heading": "Badge & Rank System",
+    "intro": "The cadet program uses a structured badge and rank system to recognise achievement and progression.",
+    "level1Name": "Star One",
+    "level1Description": "Introductory level — basic cadet training and orientation.",
+    "level2Name": "Star Two",
+    "level2Description": "Fundamental skills in leadership, first aid, and drill.",
+    "level3Name": "Star Three",
+    "level3Description": "Intermediate training with specialisation options.",
+    "level4Name": "Star Four",
+    "level4Description": "Advanced leadership and instruction skills.",
+    "level5Name": "Star Five (Master Cadet)",
+    "level5Description": "Highest cadet achievement — advanced expedition and leadership."
+  },
+  "qualification": {
+    "heading": "Qualifications & Courses",
+    "intro": "Cadets can earn a variety of nationally recognised qualifications through the cadet program.",
+    "course1Name": "Basic Fitness & Sports",
+    "course1Description": "Physical fitness standards and sports participation.",
+    "course2Name": "Basic Marksman",
+    "course2Description": "Introduction to air rifle marksmanship safety and technique.",
+    "course3Name": "Expedition",
+    "course3Description": "Land navigation, camping, and wilderness survival skills.",
+    "course4Name": "Leadership",
+    "course4Description": "Formal leadership courses held at Cadet Training Centres each summer.",
+    "course5Name": "First Aid",
+    "course5Description": "Standard First Aid and CPR certification."
+  },
+  "footer": {
+    "address": "Burlington, Ontario, Canada",
+    "email": "info@2379cadets.ca",
+    "phone": "",
+    "facebookUrl": "#",
+    "instagramUrl": "#",
+    "copyrightText": "© 2379 Burlington Army Cadet Corps. All rights reserved."
+  }
+}

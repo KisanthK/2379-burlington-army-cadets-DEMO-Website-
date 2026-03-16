@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard — Burlington Cadets CMS</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #1a1f2e;
+      --surface: #242938;
+      --border: #2d3348;
+      --text: #e2e8f0;
+      --muted: #64748b;
+      --accent: #3b82f6;
+      --success: #22c55e;
+      --danger: #ef4444;
+      --sidebar-width: 220px;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      min-height: 100vh;
+      font-size: 0.9rem;
+    }
+
+    /* ── Sidebar ─────────────────────────────────────────────────────────── */
+    .sidebar {
+      width: var(--sidebar-width);
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 0; left: 0; bottom: 0;
+      overflow-y: auto;
+    }
+
+    .sidebar-header {
+      padding: 1.2rem 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .sidebar-header h2 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #f8fafc;
+    }
+
+    .sidebar-header p {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-top: 0.2rem;
+    }
+
+    .sidebar nav {
+      padding: 0.75rem 0;
+      flex: 1;
+    }
+
+    .nav-group-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      padding: 0.5rem 1rem 0.25rem;
+    }
+
+    .nav-item {
+      display: block;
+      padding: 0.55rem 1rem;
+      color: #94a3b8;
+      text-decoration: none;
+      cursor: pointer;
+      border-radius: 6px;
+      margin: 0 0.4rem;
+      transition: background 0.15s, color 0.15s;
+      font-size: 0.85rem;
+    }
+
+    .nav-item:hover { background: var(--border); color: var(--text); }
+    .nav-item.active { background: var(--accent); color: #fff; }
+
+    .sidebar-footer {
+      padding: 1rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .user-info {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .user-info span { color: var(--text); font-weight: 600; }
+
+    .logout-btn {
+      display: block;
+      width: 100%;
+      padding: 0.5rem;
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--muted);
+      font-size: 0.8rem;
+      cursor: pointer;
+      text-align: center;
+      text-decoration: none;
+      transition: border-color 0.2s, color 0.2s;
+    }
+
+    .logout-btn:hover { border-color: var(--danger); color: var(--danger); }
+
+    /* ── Main ────────────────────────────────────────────────────────────── */
+    .main {
+      margin-left: var(--sidebar-width);
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .topbar {
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .topbar h1 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #f8fafc;
+    }
+
+    .topbar .status-badge {
+      font-size: 0.75rem;
+      padding: 0.2rem 0.6rem;
+      border-radius: 999px;
+      background: #052e16;
+      color: var(--success);
+      border: 1px solid #166534;
+    }
+
+    .content-area {
+      padding: 1.5rem;
+      flex: 1;
+      overflow-y: auto;
+    }
+
+    /* ── Sections ────────────────────────────────────────────────────────── */
+    .section-panel {
+      display: none;
+    }
+
+    .section-panel.active {
+      display: block;
+    }
+
+    .section-panel h2 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #f8fafc;
+      margin-bottom: 1.25rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .fields-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .field-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .field-group.full-width {
+      grid-column: 1 / -1;
+    }
+
+    .field-group label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.35rem;
+    }
+
+    .field-group input,
+    .field-group textarea {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-size: 0.875rem;
+      padding: 0.6rem 0.8rem;
+      outline: none;
+      transition: border-color 0.2s;
+      font-family: inherit;
+      resize: vertical;
+    }
+
+    .field-group textarea { min-height: 80px; }
+    .field-group input:focus, .field-group textarea:focus { border-color: var(--accent); }
+
+    .save-bar {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-top: 1.25rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .btn-save {
+      padding: 0.6rem 1.5rem;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .btn-save:hover { background: #2563eb; }
+    .btn-save:disabled { background: #374151; cursor: default; }
+
+    .save-msg {
+      font-size: 0.8rem;
+      color: var(--success);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .save-msg.show { opacity: 1; }
+    .save-msg.error { color: var(--danger); }
+
+    /* ── Images panel ────────────────────────────────────────────────────── */
+    .upload-area {
+      border: 2px dashed var(--border);
+      border-radius: 10px;
+      padding: 2rem;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.2s;
+      margin-bottom: 1.5rem;
+    }
+
+    .upload-area:hover, .upload-area.drag-over { border-color: var(--accent); }
+    .upload-area p { color: var(--muted); font-size: 0.875rem; }
+    .upload-area strong { color: var(--accent); }
+
+    #file-input { display: none; }
+
+    .image-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 0.75rem;
+    }
+
+    .image-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .image-card img {
+      width: 100%;
+      height: 100px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .image-card .image-info {
+      padding: 0.4rem 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.3rem;
+    }
+
+    .image-card .image-url {
+      font-size: 0.7rem;
+      color: var(--muted);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .btn-copy, .btn-delete-img {
+      flex-shrink: 0;
+      padding: 0.2rem 0.4rem;
+      border-radius: 4px;
+      font-size: 0.7rem;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--muted);
+      transition: color 0.15s, border-color 0.15s;
+    }
+
+    .btn-copy:hover { color: var(--success); border-color: var(--success); }
+    .btn-delete-img:hover { color: var(--danger); border-color: var(--danger); }
+
+    .uploading-msg {
+      font-size: 0.8rem;
+      color: var(--accent);
+      margin-bottom: 1rem;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <h2>Burlington Cadets</h2>
+      <p>CMS Dashboard</p>
+    </div>
+
+    <nav>
+      <div class="nav-group-label">Content</div>
+      <a class="nav-item active" data-section="home">Home</a>
+      <a class="nav-item" data-section="about">About</a>
+      <a class="nav-item" data-section="activities">Activities</a>
+      <a class="nav-item" data-section="resources">Resources</a>
+      <a class="nav-item" data-section="donate">Donate</a>
+      <a class="nav-item" data-section="badge">Badge System</a>
+      <a class="nav-item" data-section="qualification">Qualifications</a>
+      <a class="nav-item" data-section="footer">Footer</a>
+
+      <div class="nav-group-label" style="margin-top:0.75rem;">Media</div>
+      <a class="nav-item" data-section="images">Images</a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="user-info">Signed in as <span>__ADMIN_USER__</span></div>
+      <a href="/admin/logout" class="logout-btn">Sign Out</a>
+    </div>
+  </aside>
+
+  <div class="main">
+    <div class="topbar">
+      <h1 id="panel-title">Home</h1>
+      <span class="status-badge">Live</span>
+    </div>
+
+    <div class="content-area">
+
+      <!-- Home -->
+      <div class="section-panel active" id="panel-home">
+        <h2>Home Page Content</h2>
+        <div class="fields-grid" data-section="home"></div>
+        <div class="save-bar">
+          <button class="btn-save" data-section="home">Save Changes</button>
+          <span class="save-msg" id="msg-home"></span>
+        </div>
+      </div>
+
+      <!-- About -->
+      <div class="section-panel" id="panel-about">
+        <h2>About Page Content</h2>
+        <div class="fields-grid" data-section="about"></div>
+        <div class="save-bar">
+          <button class="btn-save" data-section="about">Save Changes</button>
+          <span class="save-msg" id="msg-about"></span>
+        </div>
+      </div>
+
+      <!-- Activities -->
+      <div class="section-panel" id="panel-activities">
+        <h2>Activities Content</h2>
+        <div class="fields-grid" data-section="activities"></div>
+        <div class="save-bar">
+          <button class="btn-save" data-section="activities">Save Changes</button>
+          <span class="save-msg" id="msg-activities"></span>
+        </div>
+      </div>
+
+      <!-- Resources -->
+      <div class="section-panel" id="panel-resources">
+        <h2>Resources Page Content</h2>
+        <div class="fields-grid" data-section="resources"></div>
+        <div class="save-bar">
+          <button class="btn-save" data-section="resources">Save Changes</button>
+          <span class="save-msg" id="msg-resources"></span>
+        </div>
+      </div>
+
+      <!-- Donate -->
+      <div class="section-panel" id="panel-donate">
+        <h2>Donate Page Content</h2>
+        <div class="fields-grid" data-section="donate"></div>
+        <div class="save-bar">
+          <button class="btn-save" data-section="donate">Save Changes</button>
+          <span class="save-msg" id="msg-donate"></span>
+        </div>
+      </div>
+
+      <!-- Badge -->
+      <div class="section-panel" id="panel-badge">
+        <h2>Badge System Content</h2>
+        <div class="fields-grid" data-section="badge"></div>
+        <div class="save-bar">
+          <button class="btn-save" data-section="badge">Save Changes</button>
+          <span class="save-msg" id="msg-badge"></span>
+        </div>
+      </div>
+
+      <!-- Qualification -->
+      <div class="section-panel" id="panel-qualification">
+        <h2>Qualifications Content</h2>
+        <div class="fields-grid" data-section="qualification"></div>
+        <div class="save-bar">
+          <button class="btn-save" data-section="qualification">Save Changes</button>
+          <span class="save-msg" id="msg-qualification"></span>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="section-panel" id="panel-footer">
+        <h2>Footer Content</h2>
+        <div class="fields-grid" data-section="footer"></div>
+        <div class="save-bar">
+          <button class="btn-save" data-section="footer">Save Changes</button>
+          <span class="save-msg" id="msg-footer"></span>
+        </div>
+      </div>
+
+      <!-- Images -->
+      <div class="section-panel" id="panel-images">
+        <h2>Image Library</h2>
+        <div class="upload-area" id="upload-area">
+          <input type="file" id="file-input" accept="image/*" multiple>
+          <p><strong>Click to upload</strong> or drag and drop an image here</p>
+          <p style="margin-top:0.4rem;font-size:0.75rem;">Images are automatically converted to WebP and resized to max 1920px wide</p>
+        </div>
+        <div class="uploading-msg" id="uploading-msg">Uploading and processing image…</div>
+        <div class="image-grid" id="image-grid"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    const SECTIONS = ['home','about','activities','resources','donate','badge','qualification','footer'];
+    let allContent = {};
+
+    // ── Navigation ──────────────────────────────────────────────────────────
+    function showSection(name) {
+      document.querySelectorAll('.section-panel').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+      document.getElementById('panel-' + name).classList.add('active');
+      document.querySelector(`.nav-item[data-section="${name}"]`).classList.add('active');
+      document.getElementById('panel-title').textContent = labelFor(name);
+      if (name === 'images') loadImages();
+    }
+
+    document.querySelectorAll('.nav-item').forEach(item => {
+      item.addEventListener('click', () => showSection(item.dataset.section));
+    });
+
+    function labelFor(key) {
+      const map = {
+        home:'Home', about:'About', activities:'Activities',
+        resources:'Resources', donate:'Donate', badge:'Badge System',
+        qualification:'Qualifications', footer:'Footer', images:'Images'
+      };
+      return map[key] || key;
+    }
+
+    // ── Load content and build fields ───────────────────────────────────────
+    async function loadContent() {
+      const res = await fetch('/api/content');
+      allContent = await res.json();
+      SECTIONS.forEach(buildFields);
+    }
+
+    function buildFields(section) {
+      const grid = document.querySelector(`.fields-grid[data-section="${section}"]`);
+      if (!grid || !allContent[section]) return;
+      grid.innerHTML = '';
+      Object.entries(allContent[section]).forEach(([key, val]) => {
+        const isLong = val && val.length > 80;
+        const group = document.createElement('div');
+        group.className = 'field-group' + (isLong ? ' full-width' : '');
+        const label = document.createElement('label');
+        label.textContent = camelToLabel(key);
+        group.appendChild(label);
+        const input = isLong ? document.createElement('textarea') : document.createElement('input');
+        input.name = key;
+        input.value = val || '';
+        if (!isLong) input.type = 'text';
+        group.appendChild(input);
+        grid.appendChild(group);
+      });
+    }
+
+    function camelToLabel(key) {
+      return key.replace(/([A-Z])/g, ' $1').replace(/^./, s => s.toUpperCase()).replace(/(\d+)/g, ' $1');
+    }
+
+    // ── Save section ────────────────────────────────────────────────────────
+    document.querySelectorAll('.btn-save').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const section = btn.dataset.section;
+        const grid = document.querySelector(`.fields-grid[data-section="${section}"]`);
+        const data = {};
+        grid.querySelectorAll('input, textarea').forEach(el => { data[el.name] = el.value; });
+
+        btn.disabled = true;
+        const msg = document.getElementById('msg-' + section);
+
+        try {
+          const res = await fetch(`/api/content/${section}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+          });
+          const json = await res.json();
+          msg.textContent = json.success ? 'Saved!' : 'Error: ' + json.error;
+          msg.className = 'save-msg show' + (json.success ? '' : ' error');
+        } catch (e) {
+          msg.textContent = 'Network error.';
+          msg.className = 'save-msg show error';
+        }
+
+        btn.disabled = false;
+        setTimeout(() => { msg.classList.remove('show'); }, 3000);
+      });
+    });
+
+    // ── Images ──────────────────────────────────────────────────────────────
+    async function loadImages() {
+      const res = await fetch('/api/images');
+      const { images } = await res.json();
+      const grid = document.getElementById('image-grid');
+      grid.innerHTML = '';
+      if (!images.length) {
+        grid.innerHTML = '<p style="color:var(--muted);font-size:0.85rem;">No images uploaded yet.</p>';
+        return;
+      }
+      images.forEach(img => grid.appendChild(buildImageCard(img)));
+    }
+
+    function buildImageCard({ filename, url }) {
+      const card = document.createElement('div');
+      card.className = 'image-card';
+      card.innerHTML = `
+        <img src="${url}" alt="${filename}" loading="lazy">
+        <div class="image-info">
+          <span class="image-url">${filename}</span>
+          <button class="btn-copy" data-url="${url}" title="Copy URL">Copy</button>
+          <button class="btn-delete-img" data-filename="${filename}" title="Delete">Del</button>
+        </div>`;
+      card.querySelector('.btn-copy').addEventListener('click', e => {
+        navigator.clipboard.writeText(window.location.origin + e.target.dataset.url);
+        e.target.textContent = 'Copied!';
+        setTimeout(() => { e.target.textContent = 'Copy'; }, 1500);
+      });
+      card.querySelector('.btn-delete-img').addEventListener('click', async e => {
+        if (!confirm('Delete this image?')) return;
+        await fetch(`/api/images/${e.target.dataset.filename}`, { method: 'DELETE' });
+        card.remove();
+      });
+      return card;
+    }
+
+    // Upload
+    const uploadArea = document.getElementById('upload-area');
+    const fileInput = document.getElementById('file-input');
+    const uploadingMsg = document.getElementById('uploading-msg');
+
+    uploadArea.addEventListener('click', () => fileInput.click());
+    uploadArea.addEventListener('dragover', e => { e.preventDefault(); uploadArea.classList.add('drag-over'); });
+    uploadArea.addEventListener('dragleave', () => uploadArea.classList.remove('drag-over'));
+    uploadArea.addEventListener('drop', e => {
+      e.preventDefault();
+      uploadArea.classList.remove('drag-over');
+      uploadFiles(e.dataTransfer.files);
+    });
+    fileInput.addEventListener('change', () => uploadFiles(fileInput.files));
+
+    async function uploadFiles(files) {
+      uploadingMsg.style.display = 'block';
+      for (const file of files) {
+        const fd = new FormData();
+        fd.append('image', file);
+        await fetch('/api/images/upload', { method: 'POST', body: fd });
+      }
+      uploadingMsg.style.display = 'none';
+      fileInput.value = '';
+      loadImages();
+    }
+
+    // ── Init ────────────────────────────────────────────────────────────────
+    loadContent();
+  </script>
+</body>
+</html>
