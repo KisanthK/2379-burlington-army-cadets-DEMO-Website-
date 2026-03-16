@@ -21,6 +21,13 @@ function ask(question) {
   return new Promise(resolve => rl.question(question, resolve));
 }
 
+function loadUsers() {
+  if (!fs.existsSync(USERS_FILE)) return [];
+  const raw = fs.readFileSync(USERS_FILE, 'utf8');
+  const parsed = JSON.parse(raw);
+  return Array.isArray(parsed) ? parsed : (parsed.users || []);
+}
+
 async function main() {
   console.log('\n  Burlington Cadets CMS — Create Admin User\n');
 
@@ -44,26 +51,21 @@ async function main() {
 
   rl.close();
 
-  const saltRounds = 12;
   console.log('\n  Hashing password…');
-  const passwordHash = await bcrypt.hash(password, saltRounds);
+  const passwordHash = await bcrypt.hash(password, 12);
 
-  let data = { _note: 'Run node scripts/create-admin.js to create credentials.', users: [] };
-  if (fs.existsSync(USERS_FILE)) {
-    data = JSON.parse(fs.readFileSync(USERS_FILE, 'utf8'));
-    if (!Array.isArray(data.users)) data.users = [];
-  }
+  const users = loadUsers();
+  const existingIndex = users.findIndex(u => u.username === username);
 
-  const existingIndex = data.users.findIndex(u => u.username === username);
   if (existingIndex >= 0) {
-    data.users[existingIndex].passwordHash = passwordHash;
+    users[existingIndex].passwordHash = passwordHash;
     console.log(`  Updated password for existing user: ${username}`);
   } else {
-    data.users.push({ username, passwordHash });
+    users.push({ username, passwordHash });
     console.log(`  Created admin user: ${username}`);
   }
 
-  fs.writeFileSync(USERS_FILE, JSON.stringify(data, null, 2), 'utf8');
+  fs.writeFileSync(USERS_FILE, JSON.stringify(users, null, 2), 'utf8');
   console.log('  Saved to data/users.json\n');
   console.log('  You can now run:  npm start');
   console.log('  Then visit:       http://localhost:3000/admin\n');

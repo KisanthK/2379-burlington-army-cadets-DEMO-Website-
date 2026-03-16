@@ -155,13 +155,8 @@
     }
 
     /* ── Sections ────────────────────────────────────────────────────────── */
-    .section-panel {
-      display: none;
-    }
-
-    .section-panel.active {
-      display: block;
-    }
+    .section-panel { display: none; }
+    .section-panel.active { display: block; }
 
     .section-panel h2 {
       font-size: 1rem;
@@ -178,14 +173,8 @@
       gap: 1rem;
     }
 
-    .field-group {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .field-group.full-width {
-      grid-column: 1 / -1;
-    }
+    .field-group { display: flex; flex-direction: column; }
+    .field-group.full-width { grid-column: 1 / -1; }
 
     .field-group label {
       font-size: 0.75rem;
@@ -275,7 +264,6 @@
       border: 1px solid var(--border);
       border-radius: 8px;
       overflow: hidden;
-      position: relative;
     }
 
     .image-card img {
@@ -348,8 +336,8 @@
     </nav>
 
     <div class="sidebar-footer">
-      <div class="user-info">Signed in as <span>__ADMIN_USER__</span></div>
-      <a href="/admin/logout" class="logout-btn">Sign Out</a>
+      <div class="user-info">Signed in as <span id="admin-username">…</span></div>
+      <a href="#" id="logout-link" class="logout-btn">Sign Out</a>
     </div>
   </aside>
 
@@ -457,6 +445,40 @@
   </div>
 
   <script>
+    // ── Auth bootstrap ──────────────────────────────────────────────────────
+    const TOKEN = localStorage.getItem('cms_token');
+    const USERNAME = localStorage.getItem('cms_username') || 'Admin';
+
+    if (!TOKEN) {
+      window.location.replace('/admin/login');
+    }
+
+    document.getElementById('admin-username').textContent = USERNAME;
+
+    document.getElementById('logout-link').addEventListener('click', function (e) {
+      e.preventDefault();
+      localStorage.removeItem('cms_token');
+      localStorage.removeItem('cms_username');
+      window.location.replace('/admin/login');
+    });
+
+    // ── Authenticated fetch helper ──────────────────────────────────────────
+    async function authFetch(url, options = {}) {
+      const headers = { ...(options.headers || {}), 'Authorization': 'Bearer ' + TOKEN };
+      // Don't set Content-Type for FormData (browser sets it with boundary)
+      if (!(options.body instanceof FormData)) {
+        headers['Content-Type'] = headers['Content-Type'] || 'application/json';
+      }
+      const res = await fetch(url, { ...options, headers });
+      if (res.status === 401) {
+        localStorage.removeItem('cms_token');
+        localStorage.removeItem('cms_username');
+        window.location.replace('/admin/login');
+        throw new Error('Session expired');
+      }
+      return res;
+    }
+
     const SECTIONS = ['home','about','activities','resources','donate','badge','qualification','footer'];
     let allContent = {};
 
@@ -485,7 +507,7 @@
 
     // ── Load content and build fields ───────────────────────────────────────
     async function loadContent() {
-      const res = await fetch('/api/content');
+      const res = await authFetch('/api/content');
       allContent = await res.json();
       SECTIONS.forEach(buildFields);
     }
@@ -526,17 +548,18 @@
         const msg = document.getElementById('msg-' + section);
 
         try {
-          const res = await fetch(`/api/content/${section}`, {
+          const res = await authFetch(`/api/content/${section}`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)
           });
           const json = await res.json();
           msg.textContent = json.success ? 'Saved!' : 'Error: ' + json.error;
           msg.className = 'save-msg show' + (json.success ? '' : ' error');
         } catch (e) {
-          msg.textContent = 'Network error.';
-          msg.className = 'save-msg show error';
+          if (e.message !== 'Session expired') {
+            msg.textContent = 'Network error.';
+            msg.className = 'save-msg show error';
+          }
         }
 
         btn.disabled = false;
@@ -546,7 +569,7 @@
 
     // ── Images ──────────────────────────────────────────────────────────────
     async function loadImages() {
-      const res = await fetch('/api/images');
+      const res = await authFetch('/api/images');
       const { images } = await res.json();
       const grid = document.getElementById('image-grid');
       grid.innerHTML = '';
@@ -574,7 +597,7 @@
       });
       card.querySelector('.btn-delete-img').addEventListener('click', async e => {
         if (!confirm('Delete this image?')) return;
-        await fetch(`/api/images/${e.target.dataset.filename}`, { method: 'DELETE' });
+        await authFetch(`/api/images/${e.target.dataset.filename}`, { method: 'DELETE' });
         card.remove();
       });
       return card;
@@ -600,7 +623,7 @@
       for (const file of files) {
         const fd = new FormData();
         fd.append('image', file);
-        await fetch('/api/images/upload', { method: 'POST', body: fd });
+        await authFetch('/api/images/upload', { method: 'POST', body: fd });
       }
       uploadingMsg.style.display = 'none';
       fileInput.value = '';

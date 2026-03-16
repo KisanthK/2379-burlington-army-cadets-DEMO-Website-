@@ -1,5 +1,4 @@
 const express = require('express');
-const session = require('express-session');
 const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
@@ -15,16 +14,6 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(session({
-  secret: process.env.SESSION_SECRET || 'burlington-cadets-cms-secret-2379',
-  resave: false,
-  saveUninitialized: false,
-  cookie: {
-    secure: false,
-    httpOnly: true,
-    maxAge: 8 * 60 * 60 * 1000 // 8 hours
-  }
-}));
 
 // ── Static files ──────────────────────────────────────────────────────────────
 app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
@@ -38,17 +27,15 @@ app.get('/content.json', (req, res) => {
   res.sendFile(contentPath);
 });
 
-// ── Auth routes (login / logout — no auth required) ───────────────────────────
+// ── Auth routes (login page + login POST + logout — no JWT required) ──────────
 app.use('/admin', authRoutes);
 
-// ── Dashboard (auth required) ─────────────────────────────────────────────────
-app.get('/admin/dashboard', requireAuth, (req, res) => {
-  let html = fs.readFileSync(path.join(__dirname, 'admin/dashboard.html'), 'utf8');
-  html = html.replace(/__ADMIN_USER__/g, req.session.username || 'Admin');
-  res.send(html);
+// ── Dashboard — HTML shell served without auth; JS handles JWT on load ────────
+app.get('/admin/dashboard', (req, res) => {
+  res.sendFile(path.join(__dirname, 'admin/dashboard.html'));
 });
 
-// ── API routes (all require auth) ────────────────────────────────────────────
+// ── API routes (all require valid JWT Bearer token) ───────────────────────────
 app.use('/api', requireAuth, apiRoutes);
 
 // ── Root redirect ─────────────────────────────────────────────────────────────
